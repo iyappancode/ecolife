@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referral & Rewards — PayVault</title>
+
+<!--
+  BRAND SYSTEM — EXACT FROM STYLE GUIDE
+  ─────────────────────────────────────
+  FONT: Gotham SSm (Light 300 · Book/Regular 400 · Medium 600 · Bold 700)
+        Web substitute: Nunito Sans (closest geometric sans-serif match)
+
+  PRIMARY COLORS
+    Primary Blue   #3E6AE1
+    Primary White  #FFFFFF
+    Primary Black  #000000
+
+  PRIMARY BLUE SHADES
+    Primary Blue   #3E6AE1
+    Cornflower     #65B8E7
+    Vista Blue     #9BA6ED
+    Periwinkle     #B2C3F3
+    Lavender Blue  #D8E1F9
+    Ghost White    #ECF0FC
+    Alice Blue     #F5FBFD
+    Snow White     #FAFBFE
+
+  SECONDARY COLOUR SHADES
+    Secondary      #171A2D
+    Outer Space    #45484D
+    Dim Grey       #747679
+    Cadet Grey     #A2A3A6
+    Timber Wolf    #D1D1D2
+    Platinum       #E8E9E9
+    Anti Flash     #F3F3F4
+    Sea Salt       #FAFAFA
+
+  TERTIARY COLORS
+    Red    #DE4549
+    Yellow #FFCC00
+    Green  #40A55D
+    Orange #FA9E05
+    Pink   #E13EB3
+
+  TYPOGRAPHY (Gotham SSm)
+    Headline Medium 32px/42px Medium
+    Headline Small  24px/36px Medium
+    Title Small     20px/30px Medium
+    Title XSmall    16px/24px Medium
+    Label Small     14px/21px Medium
+    Label XSmall    12px/18px Medium
+    Body Medium     14px/20px Book
+    Body Small      12px/18px Book
+    Body XSmall     10px/15px Book
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
+
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── BRAND TOKENS ── */
+:root {
+  /* Primary */
+  --blue:   #3E6AE1;
+  --white:  #FFFFFF;
+  --black:  #000000;
+
+  /* Blue shades */
+  --cornflower: #65B8E7;
+  --vista:      #9BA6ED;
+  --periwinkle: #B2C3F3;
+  --lavender:   #D8E1F9;
+  --ghost:      #ECF0FC;
+  --alice:      #F5FBFD;
+  --snow:       #FAFBFE;
+
+  /* Secondary greys */
+  --navy:      #171A2D;
+  --space:     #45484D;
+  --dimgrey:   #747679;
+  --cadet:     #A2A3A6;
+  --timber:    #D1D1D2;
+  --platinum:  #E8E9E9;
+  --antiflash: #F3F3F4;
+  --seasalt:   #FAFAFA;
+
+  /* Tertiary */
+  --red:    #DE4549;
+  --yellow: #FFCC00;
+  --green:  #40A55D;
+  --orange: #FA9E05;
+  --pink:   #E13EB3;
+
+  /* Semantic */
+  --bg:      var(--snow);
+  --surface: var(--white);
+  --t1: var(--navy);
+  --t2: var(--space);
+  --t3: var(--dimgrey);
+  --t4: var(--cadet);
+
+  /* Dividers */
+  --div:    rgba(62,106,225,0.08);
+  --div-sm: rgba(23,26,45,0.045);
+
+  /* Shadows — use navy base, not pure black */
+  --sh-xs:   0 1px 3px  rgba(23,26,45,0.05);
+  --sh-sm:   0 3px 14px rgba(23,26,45,0.07);
+  --sh-md:   0 10px 34px rgba(23,26,45,0.09);
+  --sh-lg:   0 20px 58px rgba(23,26,45,0.12);
+  --sh-hero: 0 28px 80px rgba(62,106,225,0.26);
+
+  /* Radii */
+  --r-2xl: 24px;
+  --r-xl:  18px;
+  --r-lg:  14px;
+  --r-md:  10px;
+  --r-pill:100px;
+
+  /* Font */
+  --font: 'Nunito Sans', 'Gotham SSm', 'Gotham', -apple-system, sans-serif;
+  --light:  300;
+  --book:   400;
+  --med:    600;
+  --bold:   700;
+  --black:  800;
+}
+
+/* ── BASE ── */
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  font-weight: var(--book);
+  color: var(--t1);
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 620px 400px at 95% -5%,  rgba(62,106,225,.055) 0%, transparent 55%),
+    radial-gradient(ellipse 420px 320px at -5% 75%, rgba(155,166,237,.045) 0%, transparent 55%);
+  min-height: 100vh;
+  padding: 28px 20px 64px;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; }
+.page { max-width: 490px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+/* ── KEYFRAMES ── */
+@keyframes riseUp    { from { opacity:0; transform:translateY(14px);} to { opacity:1; transform:none;} }
+@keyframes greenPulse{ 0%,100%{box-shadow:0 0 4px #40A55D;} 50%{box-shadow:0 0 10px #40A55D,0 0 20px rgba(64,165,93,.3);} }
+@keyframes shimmer   { 0%{left:-60px} 100%{left:130%} }
+@keyframes rippleFx  { to { transform:scale(5); opacity:0; } }
+
+/* ══════════════════════════
+   TOPBAR
+══════════════════════════ */
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 2px;
+  animation:riseUp .4s ease both;
+}
+.logo { font-size:20px; font-weight:var(--black); letter-spacing:-.5px; color:var(--blue); }
+.logo span { color:var(--navy); }
+.topbar-r { display:flex; gap:8px; align-items:center; }
+.nav-btn {
+  width:38px; height:38px; border-radius:50%;
+  background:var(--white); border:1px solid var(--div);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; box-shadow:var(--sh-xs); transition:all .2s;
+}
+.nav-btn:hover { background:var(--ghost); transform:translateY(-1px); box-shadow:var(--sh-sm); }
+.nav-btn svg { width:17px; height:17px; stroke:var(--t2); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.user-av {
+  width:38px; height:38px; border-radius:50%;
+  background:linear-gradient(135deg, var(--blue), var(--vista));
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:var(--black); color:var(--white); letter-spacing:.4px;
+  box-shadow:0 3px 12px rgba(62,106,225,.30);
+}
+
+/* ══════════════════════════
+   HERO CARD
+   Gradient: Navy → deep blue → Primary Blue → Cornflower → Vista
+══════════════════════════ */
+.hero {
+  position:relative; overflow:hidden;
+  border-radius:var(--r-2xl);
+  background:linear-gradient(148deg,
+    #171A2D  0%,
+    #1C2E72  15%,
+    #2548BA  34%,
+    #3E6AE1  54%,
+    #65B8E7  74%,
+    #9BA6ED  100%
+  );
+  padding:28px 26px 26px;
+  box-shadow:var(--sh-hero);
+  cursor:default;
+  transition:transform .32s cubic-bezier(.25,.46,.45,.94), box-shadow .32s;
+  animation:riseUp .5s .05s ease both;
+}
+.hero:hover { transform:translateY(-5px); box-shadow:0 42px 100px rgba(62,106,225,.35); }
+
+/* Decorative shapes using brand blue tints */
+.hb { position:absolute; border-radius:50%; pointer-events:none; }
+.hb1 { width:300px;height:300px; background:radial-gradient(circle, rgba(255,255,255,.07) 0%,transparent 68%); top:-84px;right:-64px; }
+.hb2 { width:185px;height:185px; background:radial-gradient(circle, rgba(178,195,243,.09) 0%,transparent 70%); bottom:-55px;left:-28px; }
+.hb3 { width:88px; height:88px; background:rgba(255,255,255,.034); top:48%;left:52%;transform:translate(-50%,-50%); }
+.hero-mesh {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.hero-shine {
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  width:60%; height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+  pointer-events:none;
+}
+
+/* Badge row */
+.hero-r1 { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; position:relative; z-index:1; }
+/* Label XSmall Medium — 12px/18px */
+.badge-pm {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,.10); backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.17); border-radius:var(--r-pill);
+  padding:5px 12px;
+  font-size:10px; font-weight:var(--med); color:rgba(255,255,255,.88); letter-spacing:1px; text-transform:uppercase;
+}
+.bdot { width:7px;height:7px;border-radius:50%; background:#40A55D; animation:greenPulse 2.2s ease infinite; }
+.hero-eye { font-size:10px; font-weight:var(--med); color:rgba(255,255,255,.38); letter-spacing:1.2px; text-transform:uppercase; }
+
+/* Headline Medium 32px/42px Medium */
+.hero-h {
+  position:relative; z-index:1;
+  font-size:clamp(21px,5.5vw,30px); font-weight:var(--black);
+  line-height:1.28; letter-spacing:-.4px;
+  color:var(--white); margin-bottom:22px;
+  text-shadow:0 2px 14px rgba(0,0,0,.14);
+}
+/* Yellow tertiary accent */
+.hero-h em {
+  font-style:normal;
+  background:linear-gradient(90deg, #FFCC00, #FA9E05);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+.hero-r2 { display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
+
+/* Points pill — glass overlay */
+.pts-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.11); backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.19); border-radius:var(--r-pill);
+  padding:8px 15px 8px 9px; transition:background .2s;
+}
+.pts-pill:hover { background:rgba(255,255,255,.19); }
+/* Star icon — Yellow+Orange tertiary gradient */
+.pts-star {
+  width:30px; height:30px; border-radius:50%;
+  background:linear-gradient(135deg, #FFCC00, #FA9E05);
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+  box-shadow:0 3px 10px rgba(250,158,5,.40);
+}
+.pts-val { font-size:15px; font-weight:var(--black); color:var(--white); line-height:1; }
+.pts-lbl { font-size:10px; color:rgba(255,255,255,.45); letter-spacing:.5px; margin-top:1px; }
+
+/* Redeem CTA */
+.cta {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,.16); backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.26); border-radius:var(--r-pill);
+  padding:10px 20px;
+  font-family:var(--font); font-size:13px; font-weight:var(--bold); color:var(--white); letter-spacing:.2px;
+  cursor:pointer; outline:none; position:relative; overflow:hidden;
+  transition:all .22s ease;
+}
+.cta svg { width:15px;height:15px;stroke:var(--white);fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.2; flex-shrink:0; }
+.cta:hover { background:rgba(255,255,255,.26); transform:scale(1.04); box-shadow:0 6px 22px rgba(0,0,0,.18); }
+.cta:active { transform:scale(.97); }
+
+/* ══════════════════════════
+   INVITE CODE CARD
+══════════════════════════ */
+.invite {
+  background:var(--white);
+  border-radius:var(--r-2xl);
+  border:1.5px dashed var(--periwinkle);  /* Periwinkle #B2C3F3 */
+  padding:22px 22px 18px; cursor:pointer;
+  position:relative; overflow:hidden; box-shadow:var(--sh-sm);
+  transition:all .24s ease;
+  animation:riseUp .5s .10s ease both;
+}
+.invite::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 180px 130px at 50% 50%, rgba(62,106,225,.035), transparent);
+  opacity:0; transition:opacity .28s; pointer-events:none;
+}
+.invite:hover { border-color:var(--blue); box-shadow:0 8px 34px rgba(62,106,225,.13); transform:translateY(-2px); }
+.invite:hover::after { opacity:1; }
+
+/* Label XSmall Medium — 12px */
+.inv-lbl { font-size:11px; font-weight:var(--med); color:var(--cadet); letter-spacing:1.3px; text-transform:uppercase; margin-bottom:10px; }
+.inv-row { display:flex; align-items:center; justify-content:space-between; }
+/* Headline Small — 24px medium weight */
+.inv-code { font-size:28px; font-weight:var(--black); color:var(--blue); letter-spacing:7px; line-height:1; }
+
+/* Copy button — Ghost White bg */
+.cpybtn {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--ghost); border:none; border-radius:var(--r-lg);
+  padding:9px 15px; font-family:var(--font);
+  font-size:12px; font-weight:var(--med); color:var(--blue);
+  cursor:pointer; position:relative; overflow:hidden; transition:all .2s;
+}
+.cpybtn svg { width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s; }
+.cpybtn:hover { background:var(--blue); color:var(--white); }
+.cpybtn:hover svg { stroke:var(--white); }
+.cpybtn:active { transform:scale(.95); }
+.cpybtn.ok { background:var(--green); color:var(--white); }  /* Tertiary Green */
+.cpybtn.ok svg { stroke:var(--white); }
+
+/* Tooltip — navy bg */
+.cpy-tip {
+  position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) scale(.82);
+  background:var(--navy); color:var(--white);
+  font-size:11px; font-weight:var(--med);
+  padding:5px 10px; border-radius:6px; white-space:nowrap;
+  pointer-events:none; opacity:0; transition:all .18s;
+}
+.cpy-tip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:4px solid transparent; border-top-color:var(--navy); }
+.cpybtn.ok .cpy-tip { opacity:1; transform:translateX(-50%) scale(1); }
+
+/* Body XSmall Book */
+.inv-hint { display:flex; align-items:center; gap:5px; margin-top:12px; font-size:11px; color:var(--timber); }
+.inv-hint svg { width:12px;height:12px;stroke:var(--cadet);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0; }
+
+/* Ripple */
+.rip { position:absolute; border-radius:50%; background:rgba(62,106,225,.11); transform:scale(0); animation:rippleFx .55s ease-out forwards; pointer-events:none; }
+
+/* ══════════════════════════
+   VALUE STRIP
+   Uses brand color tints precisely
+══════════════════════════ */
+.vstrip {
+  background:var(--white);
+  border-radius:var(--r-xl); border:1px solid var(--div);
+  box-shadow:var(--sh-sm);
+  display:grid; grid-template-columns:1fr 1px 1fr 1px 1fr;
+  overflow:hidden;
+  animation:riseUp .5s .15s ease both;
+}
+/* Divider — Lavender Blue */
+.vdiv { background:linear-gradient(180deg,transparent,var(--lavender),transparent); margin:14px 0; }
+.vcell { padding:20px 10px; display:flex; flex-direction:column; align-items:center; gap:9px; transition:background .2s; }
+.vcell:hover { background:var(--alice); }            /* Alice Blue on hover */
+.vcell.vc-c  { background:var(--snow); }             /* Snow White center highlight */
+.vcell.vc-c:hover { background:var(--alice); }
+
+.vico { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center; }
+.vico svg { width:17px;height:17px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+.vi-b { background:var(--ghost); }        .vi-b svg { stroke:var(--blue); }
+.vi-y { background:#FFF8CC; }             .vi-y svg { stroke:#8A6200; }     /* yellow tint bg */
+.vi-g { background:#E8F4EC; }             .vi-g svg { stroke:var(--green); }
+
+/* Title Small Medium — 20px */
+.v-val { font-size:18px; font-weight:var(--black); line-height:1; letter-spacing:-.3px; color:var(--navy); }
+.vcell.vc-c .v-val { font-size:20px; color:var(--blue); }
+/* Yellow badge — Tertiary Yellow */
+.v-badge { font-size:9px;font-weight:var(--black);letter-spacing:.8px;text-transform:uppercase; color:#6B4700; background:var(--yellow); border-radius:var(--r-pill); padding:2px 8px; }
+/* Body XSmall Book */
+.v-sub { font-size:10px;color:var(--cadet);text-align:center;line-height:1.4;font-weight:var(--book); }
+
+/* ══════════════════════════
+   HOW IT WORKS
+══════════════════════════ */
+.how { animation:riseUp .5s .20s ease both; }
+.sechd { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+/* Title XSmall Medium 16px */
+.sec-t { font-size:16px;font-weight:var(--black);color:var(--navy);letter-spacing:-.2px; }
+/* Ghost White bg pill */
+.sec-tag { font-size:10px;font-weight:var(--bold);color:var(--blue);background:var(--ghost);border-radius:var(--r-pill);padding:4px 10px;letter-spacing:.3px; }
+
+.steps { display:grid;grid-template-columns:repeat(3,1fr);gap:11px; }
+.step {
+  background:var(--white); border-radius:var(--r-xl);
+  border:1px solid var(--div); padding:18px 13px 16px;
+  position:relative; overflow:hidden; box-shadow:var(--sh-xs);
+  transition:all .24s cubic-bezier(.25,.46,.45,.94);
+}
+.step:hover { transform:translateY(-4px); box-shadow:var(--sh-md); border-color:var(--lavender); }
+/* Faint step number in brand blue at very low opacity */
+.step-num { position:absolute;bottom:-5px;right:5px;font-size:50px;font-weight:var(--black);color:rgba(62,106,225,.055);line-height:1;user-select:none;letter-spacing:-2px; }
+.step-ico { width:38px;height:38px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:13px; }
+.step-ico svg { width:18px;height:18px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+.si-b { background:var(--ghost); }         .si-b svg { stroke:var(--blue); }
+.si-v { background:var(--alice); }         .si-v svg { stroke:var(--vista); }  /* Vista Blue */
+.si-g { background:#E8F4EC; }             .si-g svg { stroke:var(--green); }
+/* Label Small Medium 14px */
+.step-t { font-size:13px;font-weight:var(--bold);color:var(--navy);margin-bottom:3px; }
+/* Body XSmall Book */
+.step-b { font-size:11px;color:var(--dimgrey);line-height:1.4;font-weight:var(--book); }
+
+/* ══════════════════════════
+   REFERRED FRIENDS
+══════════════════════════ */
+.friends { animation:riseUp .5s .25s ease both; }
+.sec-lnk { font-size:13px;font-weight:var(--med);color:var(--blue);letter-spacing:.2px;transition:opacity .2s; }
+.sec-lnk:hover { opacity:.6; }
+
+.fcard { background:var(--white);border-radius:var(--r-xl);border:1px solid var(--div);box-shadow:var(--sh-sm);overflow:hidden; }
+.frow { display:flex;align-items:center;gap:13px;padding:14px 18px;cursor:default;position:relative;transition:background .17s; }
+.frow:not(:last-child)::after { content:'';position:absolute;bottom:0;left:18px;right:18px;height:1px;background:var(--div-sm); }
+.frow:hover { background:var(--alice); }   /* Alice Blue hover */
+
+/* Avatars — blue-shade and tertiary gradients from brand */
+.fav { width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:var(--black);color:var(--white);flex-shrink:0; }
+.av-a { background:linear-gradient(135deg, #5B6EE8, #7E4FCB); }
+.av-b { background:linear-gradient(135deg, var(--blue), var(--cornflower)); }     /* Primary Blue → Cornflower */
+.av-c { background:linear-gradient(135deg, var(--vista), var(--periwinkle)); }   /* Vista → Periwinkle */
+.av-d { background:linear-gradient(135deg, var(--orange), #FFAE00); }            /* Tertiary Orange */
+
+.finfo { flex:1;min-width:0; }
+/* Body Medium Bold */
+.fname { font-size:14px;font-weight:var(--bold);color:var(--navy);margin-bottom:2px; }
+/* Body XSmall Medium */
+.fstat { font-size:11px;font-weight:var(--med); }
+.fs-ok  { color:var(--green); }   /* Tertiary Green */
+.fs-pnd { color:var(--orange); }  /* Tertiary Orange */
+
+.fmeta { text-align:right; }
+/* Label Small Medium */
+.famt { font-size:14px;font-weight:var(--black);letter-spacing:-.2px;margin-bottom:2px; }
+.fa-ok { color:var(--green); }
+/* Body XSmall Book — Cadet Grey */
+.fdate { font-size:11px;color:var(--cadet); }
+/* Pending — Yellow tertiary badge */
+.pnd { display:inline-block;font-size:9px;font-weight:var(--black);letter-spacing:.6px;text-transform:uppercase; color:#6B4700;background:var(--yellow);border-radius:var(--r-pill);padding:3px 8px;margin-bottom:2px; }
+
+/* ══════════════════════════
+   MILESTONE
+══════════════════════════ */
+.milestone { animation:riseUp .5s .30s ease both; }
+.ms-card {
+  background:var(--white);
+  border-radius:var(--r-xl);
+  border:1px solid var(--div);
+  box-shadow:var(--sh-sm);
+  padding:24px 22px; position:relative; overflow:hidden;
+  transition:box-shadow .24s, transform .24s;
+}
+.ms-card:hover { box-shadow:var(--sh-md); transform:translateY(-2px); }
+/* Top bar — Navy → Blue → Cornflower brand gradient */
+.ms-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg, var(--navy), var(--blue), var(--cornflower)); }
+
+.ms-top { display:flex;align-items:flex-start;gap:14px;margin-bottom:18px; }
+/* Trophy — Yellow+Orange tertiary */
+.ms-ico { width:46px;height:46px;border-radius:var(--r-lg);flex-shrink:0;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 5px 18px rgba(250,158,5,.30); }
+/* Title XSmall Medium */
+.ms-ti { font-size:15px;font-weight:var(--black);color:var(--navy);margin-bottom:3px; }
+/* Body Small Book */
+.ms-de { font-size:12px;color:var(--dimgrey);line-height:1.45;font-weight:var(--book); }
+
+.ms-cr { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px; }
+/* Headline Small 24px — Primary Blue */
+.ms-big { font-size:24px;font-weight:var(--black);color:var(--blue);letter-spacing:-.5px;line-height:1; }
+/* Body Medium Book — Dim Grey */
+.ms-of  { font-size:13px;font-weight:var(--book);color:var(--dimgrey); }
+/* Label Small Medium */
+.ms-pct { font-size:13px;font-weight:var(--bold);color:var(--t2); }
+
+/* Progress — Lavender Blue track, navy→blue→cornflower fill */
+.prog { background:var(--lavender);border-radius:var(--r-pill);height:9px;overflow:hidden;margin-bottom:14px; }
+.prog-f { height:100%;border-radius:var(--r-pill);width:0%;background:linear-gradient(90deg,var(--navy),var(--blue),var(--cornflower));transition:width 1.2s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden; }
+.prog-f::after { content:'';position:absolute;top:0;bottom:0;width:56px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);animation:shimmer 2.4s ease infinite 1.3s; }
+
+/* Dots */
+.ms-dots { display:flex;align-items:center;gap:5px;margin-bottom:16px; }
+.msd { width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:var(--black);border:2px solid;transition:all .25s; }
+.md-on  { background:var(--blue);border-color:var(--blue);color:var(--white);box-shadow:0 2px 8px rgba(62,106,225,.35); }
+.md-off { background:var(--white);border-color:var(--lavender);color:var(--cadet); }  /* Lavender Blue border */
+.msl { flex:1;height:2px;border-radius:2px; }
+.ml-on  { background:var(--blue); }
+.ml-off { background:var(--lavender); }   /* Lavender Blue */
+
+/* Footer nudge — Ghost White bg */
+.ms-foot { display:flex;align-items:center;gap:8px;background:var(--ghost);border-radius:var(--r-lg);padding:11px 14px; }
+.ms-foot svg { width:15px;height:15px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0; }
+/* Body Small Medium */
+.ms-foot-t { font-size:12px;font-weight:var(--med);color:var(--blue); }
+.ms-foot-t strong { font-weight:var(--black); }
+
+/* ══════════════════════════
+   SHARE
+══════════════════════════ */
+.share { animation:riseUp .5s .35s ease both; }
+.sh-card { background:var(--white);border-radius:var(--r-xl);border:1px solid var(--div);box-shadow:var(--sh-sm);padding:20px; }
+/* Body Medium Bold */
+.sh-title { font-size:14px;font-weight:var(--bold);color:var(--navy);margin-bottom:14px; }
+.sh-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:10px; }
+.sh-btn { display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 6px;border-radius:var(--r-lg);border:1px solid var(--div);background:var(--seasalt);cursor:pointer;transition:all .22s; }
+.sh-btn:hover { background:var(--ghost);border-color:var(--periwinkle);transform:translateY(-2px);box-shadow:var(--sh-sm); }
+.sh-ico { width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px; }
+/* Body XSmall Medium */
+.sh-lbl { font-size:10px;font-weight:var(--med);color:var(--t2);letter-spacing:.2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">pay<span>vault</span></div>
+    <div class="topbar-r">
+      <div class="nav-btn" title="Notifications">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+      <div class="user-av">PM</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hb hb1"></div><div class="hb hb2"></div><div class="hb hb3"></div>
+    <div class="hero-mesh"></div><div class="hero-shine"></div>
+    <div class="hero-r1">
+      <div class="badge-pm"><span class="bdot"></span>Premium Member</div>
+      <div class="hero-eye">Referral Program</div>
+    </div>
+    <div class="hero-h">Invite friends and<br>earn <em>rewards</em> together</div>
+    <div class="hero-r2">
+      <div class="pts-pill">
+        <div class="pts-star">⭐</div>
+        <div>
+          <div class="pts-val">3,000 pts</div>
+          <div class="pts-lbl">Points Earned</div>
+        </div>
+      </div>
+      <button class="cta" onclick="btnRipple(this,event)">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Redeem Now
+      </button>
+    </div>
+  </div>
+
+  <!-- INVITE CODE -->
+  <div class="invite" id="invCard" onclick="doCopy(event)">
+    <div class="inv-lbl">Your Invite Code</div>
+    <div class="inv-row">
+      <div class="inv-code">ENPM2026</div>
+      <button class="cpybtn" id="cpyBtn" onclick="doCopy(event)" style="position:relative;">
+        <div class="cpy-tip" id="cpyTip">Copied!</div>
+        <svg id="cpyIco" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="cpyLbl">Copy</span>
+      </button>
+    </div>
+    <div class="inv-hint">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Click anywhere on this card to copy
+    </div>
+  </div>
+
+  <!-- VALUE STRIP -->
+  <div class="vstrip">
+    <div class="vcell">
+      <div class="vico vi-b">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="v-val" style="color:var(--navy)">1 Referral</div>
+      <div class="v-sub">Friend<br>Joins</div>
+    </div>
+    <div class="vdiv"></div>
+    <div class="vcell vc-c">
+      <div class="vico vi-y">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="v-val">1000 PTS</div>
+      <div class="v-badge">Instant</div>
+      <div class="v-sub">Added<br>to Account</div>
+    </div>
+    <div class="vdiv"></div>
+    <div class="vcell">
+      <div class="vico vi-g">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="v-val" style="color:var(--green)">₹3,200</div>
+      <div class="v-sub">Wallet<br>Credit</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="sechd">
+      <div class="sec-t">How It Works</div>
+      <div class="sec-tag">3 Steps</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-ico si-b">
+          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
+        <div class="step-t">Share Code</div>
+        <div class="step-b">Send via any platform to your friends</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-ico si-v">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+        </div>
+        <div class="step-t">They Join</div>
+        <div class="step-b">Friend signs up with your code</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-ico si-g">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div class="step-t">You Earn</div>
+        <div class="step-b">1,000 pts + ₹3,200 wallet credit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRED FRIENDS -->
+  <div class="friends">
+    <div class="sechd">
+      <div class="sec-t">Referred Friends</div>
+      <a href="#" class="sec-lnk">See All →</a>
+    </div>
+    <div class="fcard">
+      <div class="frow">
+        <div class="fav av-a">AK</div>
+        <div class="finfo"><div class="fname">Arjun Kumar</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 18, 2026</div></div>
+      </div>
+      <div class="frow">
+        <div class="fav av-b">SR</div>
+        <div class="finfo"><div class="fname">Sneha Rao</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 12, 2026</div></div>
+      </div>
+      <div class="frow">
+        <div class="fav av-c">VN</div>
+        <div class="finfo"><div class="fname">Vikram Nair</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 05, 2026</div></div>
+      </div>
+      <div class="frow">
+        <div class="fav av-d">PM</div>
+        <div class="finfo"><div class="fname">Priya Mehta</div><div class="fstat fs-pnd">⏳ Pending Verification</div></div>
+        <div class="fmeta"><div class="pnd">Pending</div><div class="fdate">Mar 19, 2026</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONE -->
+  <div class="milestone">
+    <div class="sechd"><div class="sec-t">Next Milestone</div></div>
+    <div class="ms-card">
+      <div class="ms-top">
+        <div class="ms-ico">🏆</div>
+        <div>
+          <div class="ms-ti">1 Year Free Membership</div>
+          <div class="ms-de">Refer 5 friends to unlock your complimentary annual membership</div>
+        </div>
+      </div>
+      <div class="ms-cr">
+        <div><span class="ms-big">03</span><span class="ms-of"> / 05 Friends Joined</span></div>
+        <div class="ms-pct">60%</div>
+      </div>
+      <div class="prog"><div class="prog-f" id="progFill"></div></div>
+      <div class="ms-dots">
+        <div class="msd md-on">1</div><div class="msl ml-on"></div>
+        <div class="msd md-on">2</div><div class="msl ml-on"></div>
+        <div class="msd md-on">3</div><div class="msl ml-off"></div>
+        <div class="msd md-off">4</div><div class="msl ml-off"></div>
+        <div class="msd md-off">5</div>
+      </div>
+      <div class="ms-foot">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="ms-foot-t"><strong>2 more referrals</strong> to unlock your free year</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE -->
+  <div class="share">
+    <div class="sh-card">
+      <div class="sh-title">Share via</div>
+      <div class="sh-grid">
+        <div class="sh-btn"><div class="sh-ico" style="background:#E3F5E8;">💬</div><div class="sh-lbl">WhatsApp</div></div>
+        <div class="sh-btn"><div class="sh-ico" style="background:var(--ghost);">✈️</div><div class="sh-lbl">Telegram</div></div>
+        <div class="sh-btn"><div class="sh-ico" style="background:#FEEDED;">📧</div><div class="sh-lbl">Email</div></div>
+        <div class="sh-btn"><div class="sh-ico" style="background:var(--lavender);">🔗</div><div class="sh-lbl">Copy Link</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => { document.getElementById('progFill').style.width = '60%'; }, 500);
+});
+function doCopy(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const btn = document.getElementById('cpyBtn');
+  const lbl = document.getElementById('cpyLbl');
+  const ico = document.getElementById('cpyIco');
+  const card = document.getElementById('invCard');
+  navigator.clipboard.writeText('ENPM2026').catch(() => {});
+  btn.classList.add('ok'); lbl.textContent = 'Copied!';
+  ico.innerHTML = `<polyline points="20 6 9 17 4 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const rip = document.createElement('span');
+  rip.className = 'rip';
+  const sz = Math.max(card.offsetWidth, card.offsetHeight);
+  Object.assign(rip.style, {width:sz+'px',height:sz+'px',left:'50%',top:'50%',marginLeft:(-sz/2)+'px',marginTop:(-sz/2)+'px'});
+  card.appendChild(rip); setTimeout(() => rip.remove(), 580);
+  setTimeout(() => {
+    btn.classList.remove('ok'); lbl.textContent = 'Copy';
+    ico.innerHTML = `<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>`;
+  }, 2200);
+}
+function btnRipple(btn, e) {
+  const r = btn.getBoundingClientRect();
+  const sp = document.createElement('span');
+  Object.assign(sp.style, {position:'absolute',borderRadius:'50%',background:'rgba(255,255,255,.25)',width:'72px',height:'72px',left:(e.clientX-r.left-36)+'px',top:(e.clientY-r.top-36)+'px',transform:'scale(0)',animation:'rippleFx .5s ease-out forwards',pointerEvents:'none'});
+  btn.style.position='relative'; btn.style.overflow='hidden';
+  btn.appendChild(sp); setTimeout(() => sp.remove(), 520);
+}
+</script>
+</body>
+</html>
