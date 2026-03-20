@@ -372,6 +372,8 @@ a { text-decoration: none; }
 .v-badge { font-size:9px;font-weight:var(--black);letter-spacing:.8px;text-transform:uppercase; color:#6B4700; background:var(--yellow); border-radius:var(--r-pill); padding:2px 8px; }
 /* Body XSmall Book */
 .v-sub { font-size:10px;color:var(--cadet);text-align:center;line-height:1.4;font-weight:var(--book); }
+/* Body XSmall Book — muted caption below value */
+.v-caption { font-size:9px;color:var(--timber);text-align:center;letter-spacing:.4px;font-weight:var(--med);text-transform:uppercase;margin-top:-4px; }
 
 /* ══════════════════════════
    HOW IT WORKS
@@ -432,7 +434,7 @@ a { text-decoration: none; }
 
 .fmeta { text-align:right; }
 /* Label Small Medium */
-.famt { font-size:14px;font-weight:var(--black);letter-spacing:-.2px;margin-bottom:2px; }
+.famt { font-size:13px;font-weight:var(--black);letter-spacing:-.1px;margin-bottom:2px; }
 .fa-ok { color:var(--green); }
 /* Body XSmall Book — Cadet Grey */
 .fdate { font-size:11px;color:var(--cadet); }
@@ -535,7 +537,7 @@ a { text-decoration: none; }
         <div class="pts-star">⭐</div>
         <div>
           <div class="pts-val">3,000 pts</div>
-          <div class="pts-lbl">Points Earned</div>
+          <div class="pts-lbl">Available Points</div>
         </div>
       </div>
       <button class="cta" onclick="btnRipple(this,event)">
@@ -585,8 +587,9 @@ a { text-decoration: none; }
       <div class="vico vi-g">
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
-      <div class="v-val" style="color:var(--green)">₹3,200</div>
-      <div class="v-sub">Wallet<br>Credit</div>
+      <div class="v-val" style="color:var(--green)">≈ ₹3,200</div>
+      <div class="v-sub">Value</div>
+      <div class="v-caption">Redeemable value</div>
     </div>
   </div>
 
@@ -619,7 +622,7 @@ a { text-decoration: none; }
           <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
         </div>
         <div class="step-t">You Earn</div>
-        <div class="step-b">1,000 pts + ₹3,200 wallet credit</div>
+        <div class="step-b">+1,000 pts instantly<br><span style="font-size:10px;color:var(--cadet);">≈ ₹3,200 redeemable value</span></div>
       </div>
     </div>
   </div>
@@ -634,17 +637,17 @@ a { text-decoration: none; }
       <div class="frow">
         <div class="fav av-a">AK</div>
         <div class="finfo"><div class="fname">Arjun Kumar</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
-        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 18, 2026</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+1,000 pts</div><div class="fdate">Mar 18, 2026</div></div>
       </div>
       <div class="frow">
         <div class="fav av-b">SR</div>
         <div class="finfo"><div class="fname">Sneha Rao</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
-        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 12, 2026</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+1,000 pts</div><div class="fdate">Mar 12, 2026</div></div>
       </div>
       <div class="frow">
         <div class="fav av-c">VN</div>
         <div class="finfo"><div class="fname">Vikram Nair</div><div class="fstat fs-ok">✓ Joined &amp; Active</div></div>
-        <div class="fmeta"><div class="famt fa-ok">+₹3,200</div><div class="fdate">Mar 05, 2026</div></div>
+        <div class="fmeta"><div class="famt fa-ok">+1,000 pts</div><div class="fdate">Mar 05, 2026</div></div>
       </div>
       <div class="frow">
         <div class="fav av-d">PM</div>
