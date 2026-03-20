@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brand: #3E6AE1;
+    --brand-dark: #2952C8;
+    --brand-deeper: #1A3A9E;
+    --brand-light: #6B91F0;
+    --brand-soft: #EDF1FD;
+    --surface: #F7F8FC;
+    --white: #FFFFFF;
+    --text-primary: #0E1B3D;
+    --text-secondary: #5A6A8A;
+    --text-muted: #9AAAC8;
+    --green: #1DB97A;
+    --green-soft: #E8F9F1;
+    --red: #E84B6E;
+    --red-soft: #FEF0F3;
+    --blue-soft: #EDF1FD;
+    --border: rgba(62, 106, 225, 0.08);
+    --shadow-sm: 0 2px 8px rgba(14, 27, 61, 0.06);
+    --shadow-md: 0 8px 32px rgba(14, 27, 61, 0.10);
+    --shadow-lg: 0 20px 60px rgba(14, 27, 61, 0.14);
+    --shadow-card: 0 32px 80px rgba(41, 82, 200, 0.30);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: 'Titillium Web', sans-serif;
+    background: var(--surface);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 32px 24px 48px;
+    background-image:
+      radial-gradient(ellipse 600px 400px at 80% -10%, rgba(62, 106, 225, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at -10% 60%, rgba(107, 145, 240, 0.04) 0%, transparent 60%);
+  }
+
+  .dashboard {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* TOP NAV */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+  }
+  .topbar-logo {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--brand);
+  }
+  .topbar-logo span { color: var(--text-primary); }
+  .topbar-actions { display: flex; gap: 8px; }
+  .icon-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+  .icon-btn:hover { background: var(--brand-soft); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .icon-btn svg { width: 18px; height: 18px; stroke: var(--text-secondary); }
+
+  /* HERO WALLET CARD */
+  .wallet-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #1A3A9E 0%, #2952C8 35%, #3E6AE1 65%, #6B91F0 100%);
+    padding: 32px 28px 28px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    cursor: default;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .wallet-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 40px 100px rgba(41, 82, 200, 0.38);
+  }
+
+  /* Abstract shapes */
+  .wallet-card::before {
+    content: '';
+    position: absolute;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    top: -80px; right: -60px;
+    pointer-events: none;
+  }
+  .wallet-card::after {
+    content: '';
+    position: absolute;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    bottom: -60px; left: -30px;
+    pointer-events: none;
+  }
+  .card-shape-3 {
+    position: absolute;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    top: 50%; left: 40%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .card-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 6px;
+  }
+  .card-balance {
+    font-size: 38px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+  .card-balance-currency {
+    font-size: 24px;
+    font-weight: 700;
+    opacity: 0.85;
+    vertical-align: top;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .card-user {
+    text-align: right;
+  }
+  .card-user-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+    letter-spacing: 0.3px;
+  }
+  .card-user-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  .points-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 40px;
+    padding: 8px 14px 8px 10px;
+    transition: background 0.2s;
+  }
+  .points-badge:hover { background: rgba(255,255,255,0.18); }
+  .points-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #FFD166, #FF9A3C);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    box-shadow: 0 2px 8px rgba(255, 154, 60, 0.4);
+  }
+  .points-info { display: flex; flex-direction: column; }
+  .points-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .points-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+  .card-chip {
+    width: 36px; height: 28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.10));
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-chip svg { width: 20px; height: 20px; }
+
+  /* ACTIONS */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .action-card {
+    border-radius: var(--radius-md);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .action-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+  }
+  .action-card:hover::after { background: rgba(255,255,255,0.06); }
+  .action-card:hover { transform: translateY(-3px); }
+
+  .action-primary {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+    box-shadow: 0 8px 32px rgba(62, 106, 225, 0.35);
+  }
+  .action-primary:hover { box-shadow: 0 16px 48px rgba(62, 106, 225, 0.45); }
+
+  .action-secondary {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+  }
+  .action-secondary:hover { box-shadow: var(--shadow-lg); }
+
+  .action-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .action-primary .action-icon {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(4px);
+  }
+  .action-secondary .action-icon {
+    background: var(--brand-soft);
+  }
+  .action-icon svg { width: 22px; height: 22px; }
+  .action-primary .action-icon svg { stroke: #fff; }
+  .action-secondary .action-icon svg { stroke: var(--brand); }
+
+  .action-label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .action-primary .action-label { color: #fff; }
+  .action-secondary .action-label { color: var(--text-primary); }
+  .action-sub {
+    font-size: 11px;
+    font-weight: 400;
+  }
+  .action-primary .action-sub { color: rgba(255,255,255,0.6); }
+  .action-secondary .action-sub { color: var(--text-muted); }
+
+  /* SUMMARY */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .summary-card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 18px 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: all 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+  .summary-card.green::before { background: var(--green); }
+  .summary-card.red::before { background: var(--red); }
+  .summary-card.blue::before { background: var(--brand); }
+  .summary-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+  .summary-icon-wrap {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .summary-card.green .summary-icon-wrap { background: var(--green-soft); }
+  .summary-card.red .summary-icon-wrap { background: var(--red-soft); }
+  .summary-card.blue .summary-icon-wrap { background: var(--blue-soft); }
+  .summary-icon-wrap svg { width: 16px; height: 16px; }
+  .summary-card.green .summary-icon-wrap svg { stroke: var(--green); }
+  .summary-card.red .summary-icon-wrap svg { stroke: var(--red); }
+  .summary-card.blue .summary-icon-wrap svg { stroke: var(--brand); }
+
+  .summary-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .summary-value {
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    line-height: 1;
+  }
+  .summary-card.green .summary-value { color: var(--green); }
+  .summary-card.red .summary-value { color: var(--red); }
+  .summary-card.blue .summary-value { color: var(--brand); }
+
+  /* ACTIVITY SECTION */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+  }
+  .see-all {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brand);
+    text-decoration: none;
+    letter-spacing: 0.2px;
+    transition: opacity 0.2s;
+  }
+  .see-all:hover { opacity: 0.7; }
+
+  /* FILTER TABS */
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    background: var(--white);
+    border-radius: 40px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    color: var(--text-secondary);
+    user-select: none;
+  }
+  .tab.active {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(62, 106, 225, 0.35);
+  }
+  .tab:not(.active):hover { background: var(--brand-soft); color: var(--brand); }
+
+  /* TRANSACTION LIST */
+  .transaction-list {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    transition: background 0.18s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .transaction-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 18px; right: 18px;
+    height: 1px;
+    background: rgba(14, 27, 61, 0.04);
+  }
+  .transaction-item:hover { background: rgba(62, 106, 225, 0.025); }
+
+  .tx-icon {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tx-icon svg { width: 18px; height: 18px; }
+
+  .tx-icon.credit { background: var(--green-soft); }
+  .tx-icon.credit svg { stroke: var(--green); }
+  .tx-icon.debit { background: var(--red-soft); }
+  .tx-icon.debit svg { stroke: var(--red); }
+  .tx-icon.reward { background: #FFF8E8; }
+  .tx-icon.reward svg { stroke: #E89C34; }
+
+  .tx-info { flex: 1; min-width: 0; }
+  .tx-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+  }
+  .tx-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+  .tx-amount {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .tx-amount.credit { color: var(--green); }
+  .tx-amount.debit { color: var(--red); }
+  .tx-amount.reward { color: #E89C34; }
+
+  /* SECTION WRAPPER */
+  .activity-section { display: flex; flex-direction: column; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .wallet-card { animation: fadeUp 0.5s ease both; }
+  .actions-grid { animation: fadeUp 0.5s 0.08s ease both; }
+  .summary-grid { animation: fadeUp 0.5s 0.16s ease both; }
+  .activity-section { animation: fadeUp 0.5s 0.24s ease both; }
+  .topbar { animation: fadeUp 0.4s ease both; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(62, 106, 225, 0.2); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">pay<span>vault</span></div>
+    <div class="topbar-actions">
+      <div class="icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div class="icon-btn" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO WALLET CARD -->
+  <div class="wallet-card">
+    <div class="card-grid-lines"></div>
+    <div class="card-shape-3"></div>
+    <div class="card-top">
+      <div>
+        <div class="card-label">Wallet Balance</div>
+        <div class="card-balance">
+          <span class="card-balance-currency">₹</span>1,050<span style="font-size:22px;opacity:0.7">.00</span>
+        </div>
+      </div>
+      <div class="card-user">
+        <div class="card-user-name">Prabhu M.</div>
+        <div class="card-user-sub">Premium Member</div>
+        <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:3px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3)"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5)"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.8)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-bottom">
+      <div class="points-badge">
+        <div class="points-icon">⭐</div>
+        <div class="points-info">
+          <div class="points-value">4,960</div>
+          <div class="points-label">Points Available</div>
+        </div>
+      </div>
+      <div class="card-chip">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="6" width="20" height="12" rx="2" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M8 6v12M16 6v12M2 12h20" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION CARDS -->
+  <div class="actions-grid">
+    <div class="action-card action-primary">
+      <div class="action-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+      </div>
+      <div>
+        <div class="action-label">Add / Recharge</div>
+        <div class="action-sub">Top up wallet</div>
+      </div>
+    </div>
+    <div class="action-card action-secondary">
+      <div class="action-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="action-label">Redeem Points</div>
+        <div class="action-sub">Use your rewards</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+    <div class="summary-card green">
+      <div class="summary-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/>
+          <polyline points="5 12 12 5 19 12"/>
+        </svg>
+      </div>
+      <div class="summary-label">Total Added</div>
+      <div class="summary-value">₹3,000</div>
+    </div>
+    <div class="summary-card red">
+      <div class="summary-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19 12 12 19 5 12"/>
+        </svg>
+      </div>
+      <div class="summary-label">Total Spent</div>
+      <div class="summary-value">₹1,950</div>
+    </div>
+    <div class="summary-card blue">
+      <div class="summary-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="summary-label">Referrals</div>
+      <div class="summary-value">₹1,250</div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY SECTION -->
+  <div class="activity-section">
+    <div class="section-header">
+      <div class="section-title">Wallet Activity</div>
+      <a href="#" class="see-all">See All →</a>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs">
+      <div class="tab active" onclick="setTab(this)">All</div>
+      <div class="tab" onclick="setTab(this)">Credits</div>
+      <div class="tab" onclick="setTab(this)">Debits</div>
+      <div class="tab" onclick="setTab(this)">Rewards</div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="transaction-list" id="txList">
+
+      <div class="transaction-item">
+        <div class="tx-icon credit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Wallet Recharge</div>
+          <div class="tx-date">Today, 10:42 AM</div>
+        </div>
+        <div class="tx-amount credit">+₹500</div>
+      </div>
+
+      <div class="transaction-item">
+        <div class="tx-icon debit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Service Payment</div>
+          <div class="tx-date">Today, 08:15 AM</div>
+        </div>
+        <div class="tx-amount debit">−₹350</div>
+      </div>
+
+      <div class="transaction-item">
+        <div class="tx-icon reward">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Referral Reward</div>
+          <div class="tx-date">Yesterday, 3:30 PM</div>
+        </div>
+        <div class="tx-amount reward">+₹250</div>
+      </div>
+
+      <div class="transaction-item">
+        <div class="tx-icon debit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Order Payment</div>
+          <div class="tx-date">Yesterday, 11:00 AM</div>
+        </div>
+        <div class="tx-amount debit">−₹800</div>
+      </div>
+
+      <div class="transaction-item">
+        <div class="tx-icon credit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Referral Bonus</div>
+          <div class="tx-date">Mar 18, 2026</div>
+        </div>
+        <div class="tx-amount credit">+₹1,000</div>
+      </div>
+
+      <div class="transaction-item">
+        <div class="tx-icon debit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="tx-info">
+          <div class="tx-title">Subscription Plan</div>
+          <div class="tx-date">Mar 15, 2026</div>
+        </div>
+        <div class="tx-amount debit">−₹800</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function setTab(el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>
