@@ -249,23 +249,57 @@ a { text-decoration: none; }
 
 .hero-r2 { display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
 
-/* Points pill — glass overlay */
-.pts-pill {
-  display:inline-flex; align-items:center; gap:8px;
-  background:rgba(255,255,255,.11); backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.19); border-radius:var(--r-pill);
-  padding:8px 15px 8px 9px; transition:background .2s;
+/* Points block — stacked primary + secondary */
+.pts-block { display:flex; flex-direction:column; gap:8px; }
+
+/* Primary Available Points pill — glassmorphism, high emphasis */
+.pts-primary-pill {
+  display:inline-flex; align-items:center; gap:9px;
+  background:rgba(255,255,255,.15); backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.30); border-radius:var(--r-pill);
+  padding:9px 16px 9px 10px;
+  box-shadow:0 2px 12px rgba(0,0,0,.12);
+  transition:background .2s;
 }
-.pts-pill:hover { background:rgba(255,255,255,.19); }
-/* Star icon — Yellow+Orange tertiary gradient */
+.pts-primary-pill:hover { background:rgba(255,255,255,.22); }
 .pts-star {
-  width:30px; height:30px; border-radius:50%;
+  width:32px; height:32px; border-radius:50%;
   background:linear-gradient(135deg, #FFCC00, #FA9E05);
-  display:flex; align-items:center; justify-content:center; font-size:14px;
-  box-shadow:0 3px 10px rgba(250,158,5,.40);
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+  box-shadow:0 3px 10px rgba(250,158,5,.42); flex-shrink:0;
 }
-.pts-val { font-size:15px; font-weight:var(--black); color:var(--white); line-height:1; }
-.pts-lbl { font-size:10px; color:rgba(255,255,255,.45); letter-spacing:.5px; margin-top:1px; }
+.pts-primary-body { display:flex; flex-direction:column; gap:1px; }
+/* Headline XSmall 20px — white, maximum weight */
+.pts-primary-val {
+  font-size:20px; font-weight:var(--black); color:var(--white);
+  line-height:1; letter-spacing:-.4px;
+}
+.pts-unit { font-size:13px; font-weight:var(--med); opacity:.80; letter-spacing:0; }
+/* Label XSmall Medium — subtle white */
+.pts-primary-lbl {
+  font-size:10px; font-weight:var(--med); color:rgba(255,255,255,.55);
+  letter-spacing:.6px; text-transform:uppercase;
+}
+
+/* Secondary Total Earned row — muted, understated */
+.pts-secondary-row {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:0 4px;
+}
+.pts-secondary-row svg {
+  width:11px; height:11px; stroke:rgba(255,255,255,.38);
+  flex-shrink:0;
+}
+/* Body Small Book — muted white */
+.pts-earned-val {
+  font-size:12px; font-weight:var(--bold); color:rgba(255,255,255,.55);
+  letter-spacing:-.1px;
+}
+/* Body XSmall Book — very muted */
+.pts-earned-lbl {
+  font-size:11px; font-weight:var(--book); color:rgba(255,255,255,.32);
+  letter-spacing:.3px;
+}
 
 /* Redeem CTA */
 .cta {
@@ -533,11 +567,20 @@ a { text-decoration: none; }
     </div>
     <div class="hero-h">Invite friends and<br>earn <em>rewards</em> together</div>
     <div class="hero-r2">
-      <div class="pts-pill">
-        <div class="pts-star">⭐</div>
-        <div>
-          <div class="pts-val">3,000 pts</div>
-          <div class="pts-lbl">Available Points</div>
+      <div class="pts-block">
+        <!-- Primary: Available Points -->
+        <div class="pts-primary-pill">
+          <div class="pts-star">⭐</div>
+          <div class="pts-primary-body">
+            <div class="pts-primary-val">3,000 <span class="pts-unit">pts</span></div>
+            <div class="pts-primary-lbl">Available Points</div>
+          </div>
+        </div>
+        <!-- Secondary: Total Earned -->
+        <div class="pts-secondary-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span class="pts-earned-val">4,960 pts</span>
+          <span class="pts-earned-lbl">Total Earned</span>
         </div>
       </div>
       <button class="cta" onclick="btnRipple(this,event)">
